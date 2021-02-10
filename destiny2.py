@@ -61,8 +61,8 @@ async def zhu(session: CommandSession):
 #光尘商店（为了图方便，这里直接放了一张整个赛季的商店图片）
 @sv.on_command('光尘',aliases=('光尘商店'),only_to_me=False)
 async def buy(session: CommandSession):
-    img5 = MessageSegment.image("https://cdn.jsdelivr.net/gh/azmiao/picture-bed/img/buy.jpg")
-    msg = '命运2 光尘商店：\n'
+    img5 = MessageSegment.image("https://cdn.jsdelivr.net/gh/azmiao/picture-bed/img/buy-14.jpg")
+    msg = '命运2 第14赛季光尘商店：\n'
     msg = msg + str(img5)
     await session.send(msg)
 
