@@ -2,9 +2,12 @@ import datetime
 import http.client
 import time
 import sys
-from hoshino.service import Service
+import hoshino
+import os,base64
+import requests as req
+from PIL import Image
+from io import BytesIO
 from hoshino import Service, R
-from nonebot import *
 from .get_zhoubao_info import *
 from .get_xur_info import *
 from .get_chall_info import *
@@ -50,57 +53,69 @@ svzw = Service('zhuwang-reminder', enable_on_default=False, help_='蛛王更新�
 async def zhoubaoreminder():
     sys.stdout.flush()
     if get_week_day(get_time()) == '星期三':
-        msg0 = '今天是'
-        msg1 = get_time()
-        msg2 = get_week_day(get_time())
-        msg31 = '\n检测到周报已更新'
-        msg41 = '命运2 周报：\n图片作者：seanalpha\n'
-        img1 = MessageSegment.image(getzhoubaoImg(sethtml1()))
-        msg51 = msg0 + str(msg1) + str(msg2) + msg31
-        msg61 = msg41 + str(img1)
-        await svzb.broadcast(msg51, 'zhoubao-reminder', 0.2)
-        await svzb.broadcast(msg61, 'zhoubao-reminder', 0.2)
+        response = req.get(getzhoubaoImg(sethtml1()))
+        ls_f = base64.b64encode(BytesIO(response.content).read())
+        imgdata = base64.b64decode(ls_f)
+        save_dir = R.img('destiny2').path
+        path_dir = os.path.join(save_dir,'zhoubao.jpg')
+        file = open(path_dir,'wb')
+        file.write(imgdata)
+        file.close()
+        pzhoubao = ' '.join(map(str, [
+            R.img(f'destiny2/zhoubao.jpg').cqcode,
+        ]))
+        msg = '今天是' + get_week_day(get_time()) + '\n周报已更新\n' + f'命运2 周报：\n图片作者：seanalpha\n{pzhoubao}'
+        await svzb.broadcast(msg, 'zhoubao-reminder', 0.2)
 
 @svlj.scheduled_job('cron', hour='03', minute='00')
 async def laojiureminder():
     sys.stdout.flush()
     if get_week_day(get_time()) == '星期六':
-        msg0 = '今天是'
-        msg1 = get_time()
-        msg2 = get_week_day(get_time())
-        msg32 = '\n检测到老九已更新'
-        msg42 = '命运2 仄：\n图片作者：seanalpha\n'
-        img2 = MessageSegment.image(getxurImg(sethtml2()))
-        msg52 = msg0 + str(msg1) + str(msg2) + msg32
-        msg62 = msg42 + str(img2)
-        await svlj.broadcast(msg52, 'laojiu-reminder', 0.2)
-        await svlj.broadcast(msg62, 'laojiu-reminder', 0.2)
+        response = req.get(getxurImg(sethtml2()))
+        ls_f = base64.b64encode(BytesIO(response.content).read())
+        imgdata = base64.b64decode(ls_f)
+        save_dir = R.img('destiny2').path
+        path_dir = os.path.join(save_dir,'xur.jpg')
+        file = open(path_dir,'wb')
+        file.write(imgdata)
+        file.close()
+        pxur = ' '.join(map(str, [
+            R.img(f'destiny2/xur.jpg').cqcode,
+        ]))
+        msg = '今天是' + get_week_day(get_time()) + '\n老九信息已更新\n' + f'命运2 仄：\n图片作者：seanalpha\n{pxur}'
+        await svlj.broadcast(msg, 'laojiu-reminder', 0.2)
 
 @svsl.scheduled_job('cron', hour='03', minute='00')
 async def shilianreminder():
     sys.stdout.flush()
     if get_week_day(get_time()) == '星期六':
-        msg0 = '今天是'
-        msg1 = get_time()
-        msg2 = get_week_day(get_time())
-        msg33 = '\n检测到试炼周报已更新'
-        msg43 = '命运2 试炼周报：\n图片作者：seanalpha\n'
-        img3 = MessageSegment.image(getchallImg(sethtml3()))
-        msg53 = msg0 + str(msg1) + str(msg2) + msg33
-        msg63 = msg43 + str(img3)
-        await svsl.broadcast(msg53, 'shilian-reminder', 0.2)
-        await svsl.broadcast(msg63, 'shilian-reminder', 0.2)
+        response = req.get(getchallImg(sethtml3()))
+        ls_f = base64.b64encode(BytesIO(response.content).read())
+        imgdata = base64.b64decode(ls_f)
+        save_dir = R.img('destiny2').path
+        path_dir = os.path.join(save_dir,'shilian.jpg')
+        file = open(path_dir,'wb')
+        file.write(imgdata)
+        file.close()
+        pshilian = ' '.join(map(str, [
+            R.img(f'destiny2/shilian.jpg').cqcode,
+        ]))
+        msg = '今天是' + get_week_day(get_time()) + '\n试炼周报已更新\n' + f'命运2 试炼周报：\n图片作者：seanalpha\n{pshilian}'
+        await svsl.broadcast(msg, 'shilian-reminder', 0.2)
 
 @svzw.scheduled_job('cron', hour='03', minute='00')
 async def zhuwangreminder():
     sys.stdout.flush()
-    msg1 = get_time()
-    msg0 = '今天是'
-    msg2 = get_week_day(get_time())
-    msg34 = '\n检测到蛛王商店已更新'
-    msg44 = '命运2 蛛王：\n图片来源：小黑盒百科\n'
-    img4 = MessageSegment.image(getzhuImg(sethtml4()))
-    msg54 = msg0 + str(msg1) + str(msg2) + msg34
-    msg64 = msg44 + str(img4)
-    await svzw.broadcast(msg54, 'zhuwang-reminder', 0.2)
-    await svzw.broadcast(msg64, 'zhuwang-reminder', 0.2)
+    response = req.get(getzhuImg(sethtml4()))
+    ls_f = base64.b64encode(BytesIO(response.content).read())
+    imgdata = base64.b64decode(ls_f)
+    save_dir = R.img('destiny2').path
+    path_dir = os.path.join(save_dir,'zhuwang.jpg')
+    file = open(path_dir,'wb')
+    file.write(imgdata)
+    file.close()
+    pzhuwang = ' '.join(map(str, [
+        R.img(f'destiny2/zhuwang.jpg').cqcode,
+    ]))
+    msg = '今天是' + get_week_day(get_time()) + '\n蛛王商店已刷新\n注意小黑盒蛛王信息可能更新较慢\n' + f'命运2 蛛王：\n图片来源：小黑盒百科\n{pzhuwang}'
+    await svzw.broadcast(msg, 'zhuwang-reminder', 0.2)
