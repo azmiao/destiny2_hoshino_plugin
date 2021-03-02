@@ -1,5 +1,6 @@
 import hoshino
 import os,base64
+import shutil
 import requests as req
 from PIL import Image
 from io import BytesIO
@@ -22,7 +23,9 @@ sv_help = '''
 #帮助界面
 sv = Service('destiny2', help_=sv_help, bundle='命运2订阅')
 
-os.mkdir(R.img('destiny2').path)
+if os.path.exists(R.img('destiny2').path):
+    shutil.rmtree(R.img('destiny2').path)  #删除目录，包括目录下的所有文件
+    os.mkdir(R.img('destiny2').path)
 
 #周报功能
 @sv.on_fullmatch(('周报','命运2周报'))
