@@ -20,8 +20,12 @@ sv_help = '''
 [百科] 小黑盒百科链接
 '''.strip()
 
-#帮助界面
 sv = Service('destiny2', help_=sv_help, bundle='命运2订阅')
+
+#帮助界面
+@sv.on_fullmatch("命运2帮助")
+async def help(bot, ev):
+    await bot.send(ev, sv_help)
 
 if os.path.exists(R.img('destiny2').path):
     shutil.rmtree(R.img('destiny2').path)  #删除目录，包括目录下的所有文件
