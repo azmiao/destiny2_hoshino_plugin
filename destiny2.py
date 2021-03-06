@@ -11,6 +11,12 @@ from .get_chall_info import *
 from .get_zhu_info import *
 
 
+if os.path.exists(R.img('destiny2').path):
+    shutil.rmtree(R.img('destiny2').path)  #删除目录，包括目录下的所有文件
+    os.mkdir(R.img('destiny2').path)
+else:
+    os.mkdir(R.img('destiny2').path)
+
 sv_help = '''
 [周报] 查看命运2周报
 [老九] 查看老九位置和装备
@@ -26,10 +32,6 @@ sv = Service('destiny2', help_=sv_help, bundle='命运2订阅')
 @sv.on_fullmatch("命运2帮助")
 async def help(bot, ev):
     await bot.send(ev, sv_help)
-
-if os.path.exists(R.img('destiny2').path):
-    shutil.rmtree(R.img('destiny2').path)  #删除目录，包括目录下的所有文件
-    os.mkdir(R.img('destiny2').path)
 
 #周报功能
 @sv.on_fullmatch(('周报','命运2周报'))
